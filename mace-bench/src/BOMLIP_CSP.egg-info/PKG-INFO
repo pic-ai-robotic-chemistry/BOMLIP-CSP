@@ -1,0 +1,23 @@
+Metadata-Version: 2.4
+Name: BOMLIP-CSP
+Version: 0.1
+Summary: Integrating machine learning interatomic potentials with batched optimization for crystal structure prediction
+Home-page: https://github.com/pic-ai-robotic-chemistry/BOMLIP-CSP
+Author: Chengxi Zhao, Zhaojia Ma, Dingrui Fan
+Author-email: chengxi_zhao@ustc.edu.cn, zhaojia_ma@foxmail.com
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.10
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: license
+Dynamic: requires-python
+Dynamic: summary
