@@ -16,16 +16,16 @@ parser.add_argument("--gpu_offset", type=int, default=0, help="Offset for GPU nu
 parser.add_argument("--batch_size", type=int, default=4, help="Number of files to process in a single batch")
 parser.add_argument("--run_baseline", type=bool, default=False, help="Run baseline optimization using LBFGS from ase.optimize")
 parser.add_argument("--max_steps", type=int, default=100, help="Number of max steps to run the optimization (default: 100)")
-parser.add_argument("--filter1", type=str, default=None, 
+parser.add_argument("--filter1", type=str, default="UnitCellFilter", 
                     choices=[None, "UnitCellFilter"],
                     help="Type of cell filter to use in first optimization")
-parser.add_argument("--filter2", type=str, default=None,
+parser.add_argument("--filter2", type=str, default="UnitCellFilter",
                     choices=[None, "UnitCellFilter"],
                     help="Type of cell filter to use in second optimization")
-parser.add_argument("--optimizer1", type=str, default="LBFGS",
+parser.add_argument("--optimizer1", type=str, default="BFGS",
                     choices=["LBFGS", "QuasiNewton", "BFGS", "BFGSLineSearch", "BFGSFusedLS"],
-                    help="First optimizer to use (default: LBFGS)")
-parser.add_argument("--optimizer2", type=str, default="LBFGS",
+                    help="First optimizer to use (default: BFGS)")
+parser.add_argument("--optimizer2", type=str, default="BFGS",
                     choices=["LBFGS", "QuasiNewton", "BFGS", "BFGSLineSearch", "BFGSFusedLS"],
                     help="Second optimizer to use (default: LBFGS)")
 parser.add_argument("--skip_second_stage", type=bool, default=False, help="Skip the second optimization stage")
@@ -109,3 +109,4 @@ if __name__ == '__main__':
         scheduler.run()
 
     logging.info("Batch optimization completed.")
+
