@@ -22,7 +22,7 @@ echo -----------------
 echo
 
 
-python duplicate_remove3.py
+python duplicate_remove.py
 
 
 echo   
@@ -38,3 +38,4 @@ echo =========================================================
 echo SLURM job: finished   date = `date`   
 echo Total run time : $hours Hours $minutes Minutes $seconds Seconds
 echo =========================================================   
+
