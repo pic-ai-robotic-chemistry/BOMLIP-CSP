@@ -1,14 +1,15 @@
-#!/bin/bash
+
 TOP_DIR=$(pwd)
 TAR_DIR="${TOP_DIR}/test"
 
 mkdir -p "${TAR_DIR}"
 cd ${TAR_DIR}
 
-# generate structures
+# conformer search and structure generation
+# change --mode to conformer_only or structure_only to seperate the process. 
 python "${TOP_DIR}/main.py" --path ${TAR_DIR} --smiles "OC(=O)c1cc(O)c(O)c(O)c1.O" \
     --molecule_num_in_cell 1,1 --space_group_list 13,14 --add_name KONTIQ --max_workers 16\
-     --num_generation 100 --generate_conformers 20 --use_conformers 4 > generate.log 2>&1
+     --num_generation 100 --generate_conformers 20 --use_conformers 4 --mode all > generate.log 2>&1
 
 # opt structures using mace, --batch_size 0 means auto batch size only for mace
 mkdir -p "${TAR_DIR}/mace_opt"

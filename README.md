@@ -4,23 +4,43 @@ An open-source Python framework that integrates machine learning interatomic
 potentials (MLIPs) with a tailored batched optimization strategy, enabling rapid, 
 unbiased structure prediction across the full density range
 
-## Perform the complete CSP process
+## Perform a complete CSP process
 
 ```sh
 git clone https://github.com/pic-ai-robotic-chemistry/BOMLIP-CSP.git --recursive && cd BOMLIP-CSP
 
 conda create -n BOMLIP_CSP python=3.10 -y && conda activate BOMLIP_CSP
-cd BOMLIP-CSP
-top_dir=$(pwd)
-cd $top_dir/mace-bench
+cd BOMLIP-CSP/mace-bench
 ./reproduce/init_mace.sh && source util/env.sh
 sudo ./util/mps_start.sh
 
-cd $top_dir
+cd ..
 ./csp.sh
 
 sudo ./util/mps_clean.sh
 ```
+
+## Perform conformer search / structure generation / structure optimization separately
+
+In csp.sh, the argument --mode controls the jobs to do.
+Use conformer_only to perform conformer search task only.
+```sh
+python "${TOP_DIR}/main.py" --path ${TAR_DIR} --smiles "OC(=O)c1cc(O)c(O)c(O)c1.O" \
+    --molecule_num_in_cell 1,1 --space_group_list 13,14 --add_name KONTIQ --max_workers 16\
+     --num_generation 100 --generate_conformers 20 --use_conformers 4 --mode conformer_only > generate.log 2>&1
+```
+Or use structure_only to perform structure generation only.
+```sh
+python "${TOP_DIR}/main.py" --path ${TAR_DIR} --smiles "OC(=O)c1cc(O)c(O)c(O)c1.O" \
+    --molecule_num_in_cell 1,1 --space_group_list 13,14 --add_name KONTIQ --max_workers 16\
+     --num_generation 100 --generate_conformers 20 --use_conformers 4 --mode structure_only > generate.log 2>&1
+```
+Structure optimization is done by a seperate command
+```sh
+python "${TOP_DIR}/mace-bench/scripts/mace_opt_batch.py" ...
+```
+Change this command into a comment if you don't want to do that.
+
 ## Reproduce mace batch opt speedup.
 
 ```sh
