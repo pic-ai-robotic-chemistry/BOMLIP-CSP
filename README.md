@@ -7,9 +7,8 @@ unbiased structure prediction across the full density range
 
 ## Install the BOMLIP-CSP
 ```sh
-git clone https://github.com/pic-ai-robotic-chemistry/BOMLIP-CSP.git --recursive 
-cd BOMLIP-CSP
-conda create -n BOMLIP_CSP python=3.10 -y 
+git clone https://github.com/pic-ai-robotic-chemistry/BOMLIP-CSP.git --recursive
+conda create -n BOMLIP_CSP python=3.10 -y
 conda activate BOMLIP_CSP
 cd BOMLIP-CSP/mace-bench
 ./reproduce/init_mace.sh
