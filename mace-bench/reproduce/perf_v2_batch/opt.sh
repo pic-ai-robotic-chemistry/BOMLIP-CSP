@@ -1,4 +1,3 @@
-#!/bin/bash
 
 rm -r *_result_*
 

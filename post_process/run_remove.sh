@@ -1,4 +1,3 @@
-#!/bin/sh -l
 #An example for GPU job.
 #SBATCH -D ./
 #SBATCH --export=ALL

@@ -23,6 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('--space_group_list', type=str, nargs='+', default=["2,14"], help='Space group list for structure generation, spilt by comma to add mutiple groups, split by space for multiple packings')
     parser.add_argument('--add_name', type=str, nargs='+', default=["CRYSTAL"], help='Add name for the generated structures, split by space for multiple packings')
     parser.add_argument('--max_workers', type=int, default=8, help='Maximum number of workers for parallel processing')
+    parser.add_argument('--mode', type=str, default=8, choices=['all', 'conformer_only', 'structure_only'], help='choose the jobs to do')
     args = parser.parse_args()
 
     target_folder = args.path
@@ -34,6 +35,7 @@ if __name__ == '__main__':
     space_group_list = [list(map(int, group.split(','))) for group in args.space_group_list]
     add_name = args.add_name
     max_workers = args.max_workers
+    mode = args.mode
 
     num_molecules = len(smiles_list)
     num_packings = max(len(molecule_num_in_cell), len(space_group_list))
@@ -63,15 +65,21 @@ if __name__ == '__main__':
     for i in range(num_molecules):
         molecule_folder = os.path.join(target_folder, f"molecule_{i+1}")
         molecule_data.append([])
-        if generate_conformers > 0:
+        if generate_conformers > 0 and mode != "structure_only":
             conformer_search.conformer_search(smiles_list[i], molecule_folder, num_conformers=generate_conformers, max_attempts=10000, rms_thresh=0.1)
             with open(os.path.join(molecule_folder, "info.txt"), "w") as smiles_file:
                 smiles_file.write(f"SMILES: {smiles_list[i]}")
-        for j in range(use_conformers):
+        file_num = len(os.listdir(os.path.join(molecule_folder, "conformers")))
+        cnt = 0
+        for j in range(file_num):
+            if cnt >= use_conformers:
+                break
             temp_path = os.path.join(molecule_folder, "conformers", f"conformer_{j}.xyz")
             if not os.path.exists(temp_path):
                 break
             molecule_data[i].append(format_parser.read_xyz_file(temp_path))
+            cnt += 1
+            
         if len(molecule_data[i]) <= 0:
             print(f"No conformer loaded for molecule_{i+1}. Check configurations!")
             break
@@ -82,14 +90,15 @@ if __name__ == '__main__':
 
     # step2: structure generation
     ##############################################################################################
-    for i in range(num_packings):
-        for combination in combinations:
-            molecule_list = []
-            for j in range(num_molecules):
-                for cnt in range(molecule_num_in_cell[i][j]):
-                    molecule_list.append(molecule_data[j][combination[j]])
-            c_name = "".join(map(str, combination))
-            packaged_function.CSP_generater_parallel(molecule_list, target_folder, need_structure=num_generation[i], space_group_list=space_group_list[i],add_name=f"{add_name[i]}_C{c_name}", max_workers=max_workers,start_seed=1)
+    if mode != "conformer_only":
+        for i in range(num_packings):
+            for combination in combinations:
+                molecule_list = []
+                for j in range(num_molecules):
+                    for cnt in range(molecule_num_in_cell[i][j]):
+                        molecule_list.append(molecule_data[j][combination[j]])
+                c_name = "".join(map(str, combination))
+                packaged_function.CSP_generater_parallel(molecule_list, target_folder, need_structure=num_generation[i], space_group_list=space_group_list[i],add_name=f"{add_name[i]}_C{c_name}", max_workers=max_workers,start_seed=1)
 
     time_end=time.time()
     print('time cost',time_end-time_start,'s')

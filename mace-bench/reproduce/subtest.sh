@@ -1,4 +1,4 @@
-#!/bin/bash
+
 
 top_dir=$(pwd)
 

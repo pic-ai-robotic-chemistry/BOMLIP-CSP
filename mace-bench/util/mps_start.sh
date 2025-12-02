@@ -1,4 +1,4 @@
-#!/bin/bash
+
 nvidia-smi -i 0 -c EXCLUSIVE_PROCESS # Set GPU 0 to exclusive mode.  
 nvidia-smi -i 1 -c EXCLUSIVE_PROCESS # Set GPU 1 to exclusive mode.  
 nvidia-smi -i 2 -c EXCLUSIVE_PROCESS # Set GPU 2 to exclusive mode.  

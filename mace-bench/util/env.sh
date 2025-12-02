@@ -1,4 +1,3 @@
-#!/bin/bash
 
 export CUDA_HOME=/usr/local/cuda
 export PATH=$CUDA_HOME/bin:$PATH
