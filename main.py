@@ -5,6 +5,7 @@ import time
 import argparse
 import os
 import itertools
+import sys
 
 
 if __name__ == '__main__':
@@ -15,7 +16,7 @@ if __name__ == '__main__':
     ##############################################################################################
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str, default="./", help='Path to process')
-    parser.add_argument('--smiles', type=str, required=True, help='SMILES string of the molecules, split by . if multiple molecules are used')
+    parser.add_argument('--smiles', type=str, default="None", help='SMILES string of the molecules, split by . if multiple molecules are used')
     parser.add_argument('--generate_conformers', type=int, default=20, help='Number of conformers to generate. When it is <=0, only load existing conformers to generate structures')
     parser.add_argument('--use_conformers', type=int, default=4, help='Number of conformers used to generate structure. When it is <=0, no structure generation would be done')
     parser.add_argument('--molecule_num_in_cell', type=str, nargs='+', default=['1'], help='number of molecules in a unit cell, split by comma for multiple molecules, and split by space for multiple packings')
@@ -23,8 +24,13 @@ if __name__ == '__main__':
     parser.add_argument('--space_group_list', type=str, nargs='+', default=["2,14"], help='Space group list for structure generation, spilt by comma to add mutiple groups, split by space for multiple packings')
     parser.add_argument('--add_name', type=str, nargs='+', default=["CRYSTAL"], help='Add name for the generated structures, split by space for multiple packings')
     parser.add_argument('--max_workers', type=int, default=8, help='Maximum number of workers for parallel processing')
-    parser.add_argument('--mode', type=str, default=8, choices=['all', 'conformer_only', 'structure_only'], help='choose the jobs to do')
+    parser.add_argument('--mode', type=str, default='all', choices=['all', 'conformer_only', 'structure_only'], help='choose the jobs to do')
     args = parser.parse_args()
+
+    mode = args.mode
+    if args.smiles == "None" and mode != "structure_only":
+        print("Smile is required for conformer search!")
+        sys.exit(0)
 
     target_folder = args.path
     smiles_list = args.smiles.split('.')
@@ -35,9 +41,17 @@ if __name__ == '__main__':
     space_group_list = [list(map(int, group.split(','))) for group in args.space_group_list]
     add_name = args.add_name
     max_workers = args.max_workers
-    mode = args.mode
 
     num_molecules = len(smiles_list)
+    if mode == "structure_only":
+        num_molecules = 0
+        while True:
+            molecule_folder = os.path.join(target_folder, f"molecule_{num_molecules+1}")
+            if os.path.exists(molecule_folder) and os.path.isdir(molecule_folder):
+                num_molecules += 1
+            else:
+                break
+
     num_packings = max(len(molecule_num_in_cell), len(space_group_list))
 
     for i in range(len(molecule_num_in_cell)):
