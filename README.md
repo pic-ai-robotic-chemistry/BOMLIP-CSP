@@ -71,14 +71,16 @@ Explanations for all arguments are provided in main.py and mace-bench/scripts/op
 ```sh
 #!/bin/bash
 conda create -n 7net-cueq python=3.10 -y && conda activate 7net-cueq
+cd BOMLIP-CSP/mace-bench
 ./reproduce/init_7net.sh && source util/env.sh
 
 # Use a fixed batch size for structural optimization
-python ../../scripts/opt_batch.py --target_folder "../../data/perf_v2" \ 
-    --molecule_single 46 --gpu_offset 0 --n_gpus 4 --num_workers 4 \
-    --batch_size 2 --max_steps 3000 --filter1 UnitCellFilter \
-    --filter2 UnitCellFilter --optimizer1 BFGSFusedLS --optimizer2 BFGS \
-    --num_threads 2 --cueq true --use_ordered_files true --model sevennet
+# The optimization command for 7net is given in csp.sh
+python "${TOP_DIR}/mace-bench/scripts/opt_batch.py" --target_folder "${TAR_DIR}/structures" \
+    --molecule_single 13 --gpu_offset 0 --n_gpus 8 --num_workers 48 --batch_size 2 \
+    --max_steps 3000 --filter1 UnitCellFilter --filter2 UnitCellFilter \
+    --optimizer1 BFGSFusedLS --optimizer2 BFGS --num_threads 2 --cueq true \
+    --use_ordered_files true --model sevennet > opt.log 2>&1
 ```
 
 ## License
