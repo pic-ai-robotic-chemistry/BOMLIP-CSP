@@ -16,7 +16,7 @@ for config in "${natoms_nw_bs[@]}"; do
     cd "$dir" || continue
 
     pwd
-    python ../../scripts/mace_opt_batch.py \
+    python ../../scripts/opt_batch.py \
         --target_folder "../../data/perf_v2_sorted/perf_v2_${natoms}" \
         --molecule_single 46 --gpu_offset 0 --n_gpus 4 --num_workers ${nw} --batch_size ${bs} \
         --max_steps 6000 --filter1 UnitCellFilter --filter2 UnitCellFilter \
