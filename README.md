@@ -11,6 +11,7 @@ git clone https://github.com/pic-ai-robotic-chemistry/BOMLIP-CSP.git --recursive
 conda create -n BOMLIP_CSP python=3.10 -y
 conda activate BOMLIP_CSP
 cd BOMLIP-CSP/mace-bench
+# using chmod -R 755 in your BOMLIP-CSP folder if you do not have exection permission
 ./reproduce/init_mace.sh
 source util/env.sh
 cd ..
