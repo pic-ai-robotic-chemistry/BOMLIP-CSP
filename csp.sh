@@ -5,7 +5,7 @@ TAR_DIR="${TOP_DIR}/test"
 mkdir -p "${TAR_DIR}"
 cd ${TAR_DIR}
 
-# conformer search and structure generation
+# conformer search and structure generation steps
 # change --mode to conformer_only or structure_only to seperate the process. 
 python "${TOP_DIR}/main.py" --path ${TAR_DIR} --smiles "C1CC2=COC=C12" \
     --molecule_num_in_cell 1 --space_group_list 14,61 --add_name XULDUD --max_workers 16 \
@@ -18,7 +18,7 @@ python "${TOP_DIR}/main.py" --path ${TAR_DIR} --smiles "C1CC2=COC=C12" \
 #      --space_group_list 14,61 --add_name XULDUD --max_workers 16 --num_generation 100 \
 #      --use_conformers 4 --mode structure_only > generate_structure.log 2>&1
 
-# opt structures using mace, --batch_size 0 means auto batch size only for mace
+# opt structures using mace step, --batch_size 0 means auto batch size only for mace
 mkdir -p "${TAR_DIR}/mace_opt"
 cd "${TAR_DIR}/mace_opt"
 python "${TOP_DIR}/mace-bench/scripts/opt_batch.py" --target_folder "${TAR_DIR}/structures" \
