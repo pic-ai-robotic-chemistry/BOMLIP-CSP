@@ -86,6 +86,9 @@ python "${TOP_DIR}/mace-bench/scripts/opt_batch.py" --target_folder "${TAR_DIR}/
     --use_ordered_files true --model sevennet > opt.log 2>&1
 ```
 
+## Method
+See the BOMLIP-CSP paper for more details.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
